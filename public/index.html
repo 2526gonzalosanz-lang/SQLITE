@@ -36,6 +36,29 @@
     </section>
   </main>
 
+  <section class="card">
+    <h2>3) Afegir àlbum</h2>
+    <form id="album-form">
+      <div>
+        <label for="album-title">Títol de l'àlbum</label>
+        <input id="album-title" name="title" required />
+      </div>
+      <div>
+        <label for="album-artist">Artista</label>
+        <select id="album-artist" name="artist_id" required></select>
+      </div>
+      <div>
+        <button type="submit">Desar àlbum</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>4) Àlbums</h2>
+    <button id="load-albums-btn" class="btn-small">Carregar àlbums</button>
+    <p id="album-output">...</p>
+  </section>
+
   <script src="app.js"></script>
 </body>
 </html>

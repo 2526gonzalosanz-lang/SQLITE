@@ -23,6 +23,16 @@ db.serialize(() => {
     )
   `);
 
+    db.run(`
+      CREATE TABLE IF NOT EXISTS albums (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        year INTEGER,
+        artist_id INTEGER,
+        FOREIGN KEY (artist_id) REFERENCES artists(id)
+      )
+    `);
+
   db.get("SELECT id FROM artists WHERE name = ?", ["Txarango"], (error, row) => {
     if (error) {
       console.log("Error comprovant dades inicials:", error.message);
@@ -84,6 +94,31 @@ app.post("/api/artists",  (req, res) => {
       return res.status(500).json({ error: err.message });
     }
     console.log(rows);
+    res.json({ result: rows });
+  });
+});
+
+app.post("/api/afegirAlbum", (req, res) => {
+  const { title, year, artist_id } = req.body.data;
+  db.run("INSERT INTO albums (title, year, artist_id) VALUES (?, ?, ?)", 
+    [title, year, artist_id], 
+    (error) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      res.json({ result: "Àlbum afegit correctament" });
+    }
+  );
+});
+
+app.post("/api/albums", (req, res) => {
+  db.all(`SELECT a.*, art.name FROM albums a JOIN artists art ON a.artist_id = art.id ORDER BY a.id DESC`,
+    (err, rows) => res.json({ result: rows })
+  );
+});
+
+app.get("/api/artists", (req, res) => {
+  db.all("SELECT id, name FROM artists ORDER BY name", (err, rows) => {
     res.json({ result: rows });
   });
 });
