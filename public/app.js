@@ -5,9 +5,18 @@ const artistOutput = document.getElementById("artist-output");
 const albumOutput = document.getElementById("album-output");
 const loadalbumButton = document.getElementById("load-albums-btn");
 const loadartistButton = document.getElementById("load-artists-btn");
-
+const dropdown = document.getElementById("album-artist");
 
 const artistNameInput = document.getElementById("artist-name");
+
+dropdown.addEventListener("focus", async () => {
+  let artists = await trucadaendpointConsultarDades("arttist-name");
+  dropdownArtistName.innerHTML = ""
+  artists.forEach(artist => {
+    dropdownArtistName.innerHTML += `<option value="${artist.id}">${artist.name}</option>`;
+  });
+}
+);
 
 async function select(table, camp, dat1, valor) {
   const res = await fetch("/api/select", {
